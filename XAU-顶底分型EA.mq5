@@ -228,11 +228,7 @@ void BuyCheckExitSignal(){
                trade.PositionModify(ticket,openPrice,takeProfitPrice);
              }
           
-         }else if(profit>0){
-             PrintFormat("做多订单,没有见顶信号且订单不亏损,修改上移止损价格 订单号=%s", ticketStr); 
-             trade.PositionModify(ticket,openPrice,takeProfitPrice);
          }
-         
       }
    }
 }
