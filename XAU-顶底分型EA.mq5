@@ -213,14 +213,13 @@ void BuyCheckExitSignal(){
           double openPrice = PositionGetDouble(POSITION_PRICE_OPEN); // 获取开仓价格
           double stopLossPrice = PositionGetDouble(POSITION_SL); // 获取止损价格
           double takeProfitPrice = PositionGetDouble(POSITION_TP); // 获取止盈价格
-          double profit = PositionGetDouble(POSITION_PROFIT);      //获取当前订单的盈利
-          double newSL, newTP;
+          double profit = PositionGetDouble(POSITION_PROFIT);      //获取当前订单的盈利 
           //
           Fractal upToDateTop=GetUpToDateTop(fractals);
           //见顶信号出现
           if(upToDateTop.direction!=0 && upToDateTop.originalIndex==1){
-             //见顶收阴,并且有明显的均线变化
-             if(open[1]>close[1] && emaKEMA[0]+90 *_Point<emaKEMA[1]){
+             //见顶收阴,并且有明显的均线变化,
+             if(open[1]>close[1] && emaKEMA[0]+90 *_Point<emaKEMA[1] && TimeCurrent()> upToDateTop.time+200){
                PrintFormat("做多订单出现见顶信号 并且出现1号k收阴 订单号=%s", ticketStr); 
                trade.PositionClose(ticket);
              }else{
@@ -228,6 +227,11 @@ void BuyCheckExitSignal(){
                trade.PositionModify(ticket,openPrice,takeProfitPrice);
              }
           
+         }else {
+            if(stopLossPrice<low[1]){
+               PrintFormat("做多订单修改止损价格 订单号=%s", ticketStr); 
+               trade.PositionModify(ticket,low[1],takeProfitPrice);
+            }
          }
       }
    }
